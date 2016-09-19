@@ -1,0 +1,6 @@
+- hosts: myruby
+  become: yes
+  vars_files:
+   - vars/main.yml    
+  roles:
+     - { role: Mooash.nagios-nrpe-server }

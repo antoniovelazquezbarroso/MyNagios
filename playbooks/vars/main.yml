@@ -1,0 +1,7 @@
+nagios_users:
+  - user: nagiosadmin
+    pass: nagiosadmin
+
+# PARA myruby
+nagios_nrpe_server_allowed_hosts: 127.0.0.1, 192.168.2.10
+
