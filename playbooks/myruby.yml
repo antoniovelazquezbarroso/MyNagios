@@ -1,3 +1,4 @@
+---
 - hosts: myruby
   become: yes
   vars_files:

@@ -1,3 +1,4 @@
+---
 - hosts: monitoring
   become: yes
   vars_files:
@@ -5,3 +6,36 @@
   roles:
      - { role: networklore.nagios }
      - { role: networklore.nrpe-client }
+
+  tasks:
+# Add Nagios nagios.cfg main configuration file (config object folders to use)
+# and Nagios objects configuration (localhost and railsapp) 
+    - name: Copy Nagios configuration files.
+      copy:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+        owner: nagios
+        group: nagios
+        mode: 0644
+      with_items:
+      - {
+        src: "files/nagios.cfg",
+        dest: "/usr/local/nagios/etc/nagios.cfg"
+      }
+      - {
+        src: "files/localhost.cfg",
+        dest: "/usr/local/nagios/etc/objects/localhost.cfg"
+      }
+      - {
+        src: "files/myruby.cfg",
+        dest: "/usr/local/nagios/etc/objects/myruby.cfg"
+      }
+# Remove Unneeded and Conflicting Magios Objects (printer.cfg switch.cfg and windows.cfg)
+    - name: Remove unneeded conflicting nagios objects
+      file:
+        path: "{{ item }}"
+        state: absent
+      with_items:
+      - "/usr/local/nagios/etc/objects/windows.cfg"
+      - "/usr/local/nagios/etc/objects/printer.cfg"
+      - "/usr/local/nagios/etc/objects/switch.cfg" 
